@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmartYouTubeSummarizer.Services
 {
-    public class AiService : IAiService
+    public class AiService : IAiService 
     {
         private readonly string _endpoint;
 
@@ -72,9 +72,6 @@ namespace SmartYouTubeSummarizer.Services
                            $"[VİDEO MƏTNİ]:\n{videoTranscript}\n\n" +
                            $"[SUAL]: {userQuestion}";
 
-            // 2. Sənin rəsmi Gemini API Key-in (Bunu öz açarınla əvəz et)
-
-            // 3. Google Gemini-nin rəsmi JSON sorğu strukturu qurulur
             var requestBody = new
             {
                 contents = new[]
@@ -89,7 +86,6 @@ namespace SmartYouTubeSummarizer.Services
         }
             };
 
-            // Obyekti JSON mətninə çeviririk (UTF-8 dəstəyi ilə)
             string jsonPayload = JsonSerializer.Serialize(requestBody);
 
             using (var httpClient = new HttpClient())
@@ -98,14 +94,14 @@ namespace SmartYouTubeSummarizer.Services
                 {
                     var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-                    // API-yə POST sorğusu göndərilir
+
                     var response = await httpClient.PostAsync(_endpoint, content);
                     response.EnsureSuccessStatusCode();
 
-                    // Gələn cavab oxunur
+
                     string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                    // JSON-dan sırf AI-nin yazdığı mətni (text) çəkirik
+
                     using (JsonDocument doc = JsonDocument.Parse(jsonResponse))
                     {
                         var root = doc.RootElement;
